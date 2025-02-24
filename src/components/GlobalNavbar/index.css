@@ -69,9 +69,7 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 button:hover {

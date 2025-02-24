@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Link, useLocation, useHistory} from 'react-router-dom'
 import './index.css'
 
@@ -6,13 +6,22 @@ const GlobalNavbar = () => {
   const location = useLocation()
   const history = useHistory()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(true) // Always keep search bar open
   const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    // Retrieve the query from the URL when navigating to SearchedMoviesPage
+    const query = new URLSearchParams(location.search).get('query')
+    if (query) {
+      setSearchQuery(query)
+      setSearchOpen(true) // Ensure search input is visible on search results page
+    }
+  }, [location])
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
       history.push(`/searched?query=${searchQuery}`)
-      setSearchOpen(false)
+      setSearchOpen(true) // Keep search input open
     }
   }
 
@@ -72,9 +81,13 @@ const GlobalNavbar = () => {
       {/* Search Input Below Navbar */}
       {searchOpen && (
         <div className="search-container">
+          <label htmlFor="search-bar" className="sr-only">
+            Search Movies
+          </label>
           <input
+            id="search-bar"
             type="text"
-            placeholder="Search movies..."
+            placeholder="Search..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
           />
@@ -82,8 +95,9 @@ const GlobalNavbar = () => {
             className="search-button"
             type="button"
             onClick={handleSearch}
+            aria-label="Search"
           >
-            🔍
+            Search
           </button>
         </div>
       )}
