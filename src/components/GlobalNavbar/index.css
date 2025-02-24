@@ -110,3 +110,23 @@ button:hover {
     display: none;
   }
 }
+/* Search Button in Navbar */
+.search-toggle-button {
+  background: none;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Position Search Bar Below Navbar */
+.search-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 5px;
+  border-radius: 25px;
+  transition: box-shadow 0.3s ease-in-out;
+  margin-top: 10px;
+  justify-content: center;
+}

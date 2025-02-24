@@ -10,7 +10,7 @@ import NotFound from './components/NotFound'
 
 const App = () => (
   <>
-    <GlobalNavbar /> {/* Add Navbar so it appears on all pages */}
+    <GlobalNavbar /> {/* Global Navbar for all pages */}
     <Switch>
       <Route exact path="/" component={PopularMoviesPage} />
       <Route exact path="/searched" component={SearchedMoviesPage} />
