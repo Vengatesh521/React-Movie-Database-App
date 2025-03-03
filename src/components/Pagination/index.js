@@ -1,48 +1,80 @@
-// components/Pagination.js
 import React from 'react'
-import PropTypes from 'prop-types'
 import './index.css'
+import PropTypes from 'prop-types'
 
-const Pagination = ({totalPages, currentPage, onPageChange}) => {
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      onPageChange(currentPage + 1)
-    }
+class Pagination extends React.Component {
+  state = {
+    pageNo: 1,
   }
 
-  const handlePrev = () => {
-    if (currentPage > 1) {
-      onPageChange(currentPage - 1)
-    }
+  onNextPage = () => {
+    const {apiCallback, totalPages} = this.props
+
+    this.setState(
+      prevState => {
+        if (prevState.pageNo < totalPages) {
+          return {
+            pageNo: prevState.pageNo + 1,
+          }
+        }
+        return prevState
+      },
+      () => {
+        const {pageNo} = this.state
+        apiCallback(pageNo)
+      },
+    )
   }
 
-  return (
-    <div className="pagination-container">
-      <button
-        type="button"
-        className="pagination-btn"
-        onClick={handlePrev}
-        disabled={currentPage === 1}
-      >
-        Prev
-      </button>
-      <span className="page-number">{currentPage}</span>
-      <button
-        type="button"
-        className="pagination-btn"
-        onClick={handleNext}
-        disabled={currentPage === totalPages}
-      >
-        Next
-      </button>
-    </div>
-  )
+  onPrevPage = () => {
+    const {apiCallback} = this.props
+    this.setState(
+      prevState => {
+        if (prevState.pageNo > 1) {
+          return {
+            pageNo: prevState.pageNo - 1,
+          }
+        }
+        return prevState
+      },
+      () => {
+        const {pageNo} = this.state
+        apiCallback(pageNo)
+      },
+    )
+  }
+
+  render() {
+    const {pageNo} = this.state
+    const {totalPages} = this.props
+
+    return (
+      <div className="mb-3 d-flex justify-content-center align-items-center">
+        <button
+          type="button"
+          className="control-btn"
+          onClick={this.onPrevPage}
+          disabled={pageNo === 1}
+        >
+          Prev
+        </button>
+        <p className="page-no">{pageNo}</p>
+        <button
+          type="button"
+          className="control-btn"
+          onClick={this.onNextPage}
+          disabled={pageNo === totalPages}
+        >
+          Next
+        </button>
+      </div>
+    )
+  }
 }
 
 Pagination.propTypes = {
+  apiCallback: PropTypes.func.isRequired,
   totalPages: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
 }
 
 export default Pagination

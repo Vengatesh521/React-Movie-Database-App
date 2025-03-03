@@ -41,7 +41,9 @@ button {
   color: rgb(255, 255, 255);
   border: none;
   cursor: pointer; /* Pointer on hover */
-  transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth animation */
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease; /* Smooth animation */
 }
 
 button:hover {
