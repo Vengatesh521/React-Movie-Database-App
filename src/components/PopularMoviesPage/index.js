@@ -1,40 +1,33 @@
-import {useState, useEffect} from 'react'
+// components/PopularMoviesPage.js
+import React from 'react'
 import {Link} from 'react-router-dom'
-
+import Pagination from '../Pagination'
+import useMovies from '../useMovies'
 import './index.css'
 
 const PopularMoviesPage = () => {
-  const [movies, setMovies] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const {
+    movies,
+    totalPages,
+    currentPage,
+    setCurrentPage,
+    loading,
+    error,
+  } = useMovies('popular')
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch(
-          'https://api.themoviedb.org/3/movie/popular?api_key=253f43a52ae817ca16ff416024ce3301&language=en-US&page=1',
-        )
-        if (!response.ok) throw new Error('Failed to fetch movies')
-        const data = await response.json()
-        setMovies(data.results)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchMovies()
-  }, [])
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
+
   return (
     <div className="container movie-container">
-      <div className="row  row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-3">
+      <div className="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-3">
         {movies.map(movie => (
-          <Link to={`/movie/${movie.id}`} style={{textDecoration: 'none'}}>
-            <div className="col " key={movie.id}>
-              {' '}
-              {/* Use .movie-card */}
+          <Link
+            key={movie.id}
+            to={`/movie/${movie.id}`}
+            style={{textDecoration: 'none'}}
+          >
+            <div className="col">
               <div className="movie-card">
                 <img
                   className="movie-image"
@@ -42,7 +35,7 @@ const PopularMoviesPage = () => {
                   alt={movie.title}
                 />
                 <h1 className="movie-title">{movie.title}</h1>
-                <h1 className="movie-release">{movie.vote_average}</h1>
+                <p className="movie-release">Rating: {movie.vote_average}</p>
                 <button type="button" className="movie-button">
                   View Details
                 </button>
@@ -51,7 +44,13 @@ const PopularMoviesPage = () => {
           </Link>
         ))}
       </div>
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
     </div>
   )
 }
+
 export default PopularMoviesPage
